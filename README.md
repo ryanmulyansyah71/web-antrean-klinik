@@ -22,11 +22,8 @@ Sistemnya sudah real time, jadi begitu tombol dipanggil di halaman admin, angka 
 # Cara Nyobain di Laptop / VS Code:
 1. Buka folder proyek ini di Visual Studio Code.
 2. Nyalakan ekstensi *Live Server* (klik tombol Go Live di pojok kanan bawah VS Code).
-3. Buka browser Google Chrome, lalu buka dua tab ini secara berdampingan:
-   - Halaman Admin: http://127.0.0
-   - Halaman Layar: http://127.0.0
-4. *Catatan Penting*: Begitu halaman layar.html terbuka, klik sembarang tempat kosong di layar itu sekali saja. Ini wajib supaya Google Chrome memberikan izin suaranya bunyi.
-5. Tinggal klik tombol di halaman admin, nanti angka di halaman layar bakal naik sendiri dan keluar suaranya.
+3. *Catatan Penting*: Begitu halaman layar.html terbuka, klik sembarang tempat kosong di layar itu sekali saja. Ini wajib supaya Google Chrome memberikan izin suaranya bunyi.
+4. Tinggal klik tombol di halaman admin, nanti angka di halaman layar bakal naik sendiri dan keluar suaranya.
 
 
 # Link Demo Web (GitHub Pages):
