@@ -27,6 +27,6 @@ Sistemnya sudah real time, jadi begitu tombol dipanggil di halaman admin, angka 
 
 
 # Link Demo Web (GitHub Pages):
-Kalau mau diakses online lewat HP atau komputer lain, bisa pakai link GitHub Pages ini:
+Kalau mau diakses online lewat komputer lain, bisa pakai link GitHub Pages ini:
 - Link Staf (Admin):  https://ryanmulyansyah71.github.io/web-antrean-klinik/admin.html
 - Link Monitor (Layar):  https://ryanmulyansyah71.github.io/web-antrean-klinik/layar.html
