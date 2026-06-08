@@ -5,10 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Halaman Admin Tombol Antrean</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; background-color: #eef2f3; padding: 50px; margin: 0; }
-        .container { max-width: 500px; margin: 50px auto; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            text-align: center;
+            background-color: #eef2f3;
+            padding: 50px;
+            margin: 0;
+        }
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
         h1 { color: #2c3e50; font-size: 24px; margin-bottom: 30px; }
-        .btn-panggil { background-color: #27ae60; color: white; border: none; padding: 20px 40px; font-size: 22px; font-weight: bold; border-radius: 10px; cursor: pointer; box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3); width: 100%; }
+        .btn-panggil {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 22px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+            transition: all 0.1s ease;
+            width: 100%;
+        }
+        .btn-panggil:hover { background-color: #219653; }
         .btn-panggil:active { transform: scale(0.97); }
     </style>
 </head>
@@ -19,12 +45,11 @@
         <button id="tombol-panggil" class="btn-panggil">PANGGIL ANTREAN BERIKUTNYA (+1)</button>
     </div>
 
-    <!-- Memanggil Library Firebase Resmi dari Internet (Bebas Error CORS di GitHub Pages) -->
-    <script src="https://unpkg.com"></script>
-    <script src="https://unpkg.com"></script>
+    <!-- Memanggil file jembatan lokal yang aman -->
+    <script src="firebase-app-compat.js"></script>
 
     <script>
-        // PENTING: Ganti dengan kode firebaseConfig ASLI milik Anda dari konsol Firebase!
+        // PENTING: GANTI teks di bawah ini dengan isi firebaseConfig asli milik Anda!
         const firebaseConfig = {
             apiKey: "AIzaSyBXh2IAUXicqWAUK9VJqEEH1vR6AE5wqLQ",
             authDomain: "antrean-klinik-e890d.firebaseapp.com",
@@ -34,22 +59,22 @@
             appId: "1:9153510841:web:3f3c0f7de584d59f9d4a68"
         };
 
-        // Inisialisasi Firebase Asli
+        // Mengaktifkan Sistem Cloud Utama
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         const docRef = db.collection("antrean").doc("nomor_sekarang");
 
+        // Logika menaikkan antrean cloud saat tombol diklik
         function panggilBerikutnya() {
             db.runTransaction((transaction) => {
                 return transaction.get(docRef).then((sfDoc) => {
-                    if (!sfDoc.exists) { throw "Dokumen tidak ditemukan!"; }
                     const nilaiBaru = sfDoc.data().nilai + 1;
-                    transaction.update(docRef, { nilai: nilaiBaru });
+                    return transaction.update(docRef, { nilai: nilaiBaru });
                 });
             }).then(() => {
-                console.log("Berhasil tambah antrean di server!");
+                console.log("Berhasil memperbarui angka antrean ke Cloud Google.");
             }).catch((error) => {
-                alert("Gagal: " + error);
+                console.error("Gagal memproses transaksi cloud:", error);
             });
         }
 
@@ -57,4 +82,5 @@
     </script>
 </body>
 </html>
+
 
