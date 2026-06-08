@@ -20,46 +20,12 @@
         <div class="info">📢 <strong>PENTING:</strong> Klik layar ini sekali dulu agar suara panggilannya aktif!</div>
     </div>
 
+    <!-- SDK Resmi Google Firebase Cloud (Kompatibel & Aman Lintas Browser) -->
+    <script src="https://gstatic.com"></script>
+    <script src="https://gstatic.com"></script>
+
     <script>
-        // ENGINE INTERNAL CLOUD LOKAL (REST ARCHITECTURE)
-        (function(global) {
-            var configRef = null;
-            var snapshotListeners = [];
-
-            global.firebase = {
-                initializeApp: function(config) {
-                    configRef = config;
-                    setInterval(function() {
-                        if (!configRef) return;
-                        var url = "https://googleapis.com" + configRef.projectId + "/databases/(default)/documents/antrean/nomor_sekarang?key=" + configRef.apiKey;
-                        fetch(url).then(function(res) { return res.json(); }).then(function(data) {
-                            if (data && data.fields && data.fields.nilai) {
-                                var angkaTerbaru = parseInt(data.fields.nilai.integerValue) || 0;
-                                snapshotListeners.forEach(function(listener) {
-                                    listener({ exists: true, data: function() { return { nilai: angkaTerbaru }; } });
-                                });
-                            }
-                        }).catch(function(err) { console.error("Gagal sinkronisasi data cloud:", err); });
-                    }, 2000);
-                    return this;
-                },
-                firestore: function() {
-                    return {
-                        collection: function() {
-                            return {
-                                doc: function() {
-                                    return {
-                                        onSnapshot: function(callback) { snapshotListeners.push(callback); }
-                                    };
-                                }
-                            };
-                        }
-                    };
-                }
-            };
-        })(window);
-
-        // CONFIG ASLI FIREBASE ANDA (VERSI LENGKAP STANDAR RESMI)
+        // MASUKKAN FIREBASE CONFIG ASLI ANDA DI SINI (Wajib Sama)
         const firebaseConfig = {
             apiKey: "AIzaSyBXh2IAUXicqWAUK9VJqEEH1vR6AE5wqLQ",
             authDomain: "antrean-klinik-e890d.firebaseapp.com",
@@ -86,9 +52,10 @@
             }
         }
 
+        // Real-time listener resmi Google Cloud, mendengarkan perubahan data dari device mana pun
         docRef.onSnapshot((snapshot) => {
             if (snapshot.exists) {
-                const nomorBaru = snapshot.data().nilai;
+                const nomorBaru = snapshot.data().nilai || 0;
                 document.getElementById("nomor-layar").innerText = nomorBaru;
 
                 if (!halamanBaruDiakses) {
@@ -96,6 +63,9 @@
                 }
                 halamanBaruDiakses = false;
             }
+        }, (error) => {
+            console.error("Gagal terhubung ke Cloud Google:", error);
+            document.getElementById("nomor-layar").innerText = "Error Koneksi";
         });
     </script>
 </body>

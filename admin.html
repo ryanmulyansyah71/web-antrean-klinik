@@ -19,46 +19,12 @@
         <button id="tombol-panggil" class="btn-panggil">PANGGIL ANTREAN BERIKUTNYA (+1)</button>
     </div>
 
-    <script>
-        // ENGINE INTERNAL CLOUD LOKAL (REST ARCHITECTURE)
-        (function(global) {
-            var configRef = null;
-            global.firebase = {
-                initializeApp: function(config) { configRef = config; return this; },
-                firestore: function() {
-                    return {
-                        collection: function() {
-                            return {
-                                doc: function() {
-                                    return {
-                                        runTransaction: function(transactionFunction) {
-                                            var url = "https://googleapis.com" + configRef.projectId + "/databases/(default)/documents/antrean/nomor_sekarang?key=" + configRef.apiKey;
-                                            return fetch(url).then(function(res) { return res.json(); }).then(function(data) {
-                                                var nilaiSekarang = data && data.fields && data.fields.nilai ? parseInt(data.fields.nilai.integerValue) || 0 : 0;
-                                                var transactionObj = {
-                                                    get: function() { return Promise.resolve({ exists: true, data: function() { return { nilai: nilaiSekarang }; } }); },
-                                                    update: function(docRef, updateData) {
-                                                        var patchUrl = "https://googleapis.com" + configRef.projectId + "/databases/(default)/documents/antrean/nomor_sekarang?updateMask.fieldPaths=nilai&key=" + configRef.apiKey;
-                                                        return fetch(patchUrl, {
-                                                            method: "PATCH",
-                                                            headers: { "Content-Type": "application/json" },
-                                                            body: JSON.stringify({ fields: { nilai: { integerValue: updateData.nilai.toString() } } })
-                                                        });
-                                                    }
-                                                };
-                                                return transactionFunction(transactionObj);
-                                            });
-                                        }
-                                    };
-                                }
-                            };
-                        }
-                    };
-                }
-            };
-        })(window);
+    <!-- SDK Resmi Google Firebase Cloud (Kompatibel & Aman Lintas Browser) -->
+    <script src="https://gstatic.com"></script>
+    <script src="https://gstatic.com"></script>
 
-        // CONFIG ASLI FIREBASE ANDA (VERSI LENGKAP STANDAR RESMI)
+    <script>
+        // MASUKKAN FIREBASE CONFIG ASLI ANDA DI SINI
         const firebaseConfig = {
             apiKey: "AIzaSyBXh2IAUXicqWAUK9VJqEEH1vR6AE5wqLQ",
             authDomain: "antrean-klinik-e890d.firebaseapp.com",
@@ -68,6 +34,7 @@
             appId: "1:9153510841:web:3f3c0f7de584d59f9d4a68"
         };
 
+        // Inisialisasi Cloud Google
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         const docRef = db.collection("antrean").doc("nomor_sekarang");
@@ -75,13 +42,14 @@
         function panggilBerikutnya() {
             db.runTransaction((transaction) => {
                 return transaction.get(docRef).then((sfDoc) => {
-                    const nilaiBaru = sfDoc.data().nilai + 1;
-                    return transaction.update(docRef, { nilai: nilaiBaru });
+                    if (!sfDoc.exists) { throw "Dokumen tidak ditemukan!"; }
+                    const nilaiBaru = (sfDoc.data().nilai || 0) + 1;
+                    transaction.update(docRef, { nilai: nilaiBaru });
                 });
             }).then(() => {
-                console.log("Berhasil memperbarui cloud.");
+                console.log("Sukses memperbarui Cloud Google Firestore!");
             }).catch((error) => {
-                console.error("Gagal transaksi cloud:", error);
+                console.error("Gagal transaksi:", error);
             });
         }
 
