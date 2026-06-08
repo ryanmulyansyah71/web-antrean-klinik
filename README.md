@@ -1,5 +1,5 @@
 # web-antrean-klinik
-# Web Antrean Klinik Real-Time + Suara Panggilan
+# Web Antrean Klinik Real Time + Suara Panggilan
 
 Ini adalah proyek website sistem antrean sederhana yang biasa dipakai di klinik atau rumah sakit. Web ini dibuat pakai HTML, CSS, dan JavaScript biasa tanpa framework ribet. 
 
@@ -31,5 +31,5 @@ Sistemnya sudah real time, jadi begitu tombol dipanggil di halaman admin, angka 
 
 # Link Demo Web (GitHub Pages):
 Kalau mau diakses online lewat HP atau komputer lain, bisa pakai link GitHub Pages ini:
-- Link Staf (Admin): https://github.io
-- Link Monitor (Layar): https://github.io
+- Link Staf (Admin):  https://ryanmulyansyah71.github.io/web-antrean-klinik/admin.html
+- Link Monitor (Layar):  https://ryanmulyansyah71.github.io/web-antrean-klinik/layar.html
