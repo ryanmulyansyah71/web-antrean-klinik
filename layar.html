@@ -5,56 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Layar Monitor Antrean</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            text-align: center;
-            background-color: #f4f4f9;
-            padding: 50px;
-            margin: 0;
-        }
-        .antrean-card {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            display: inline-block;
-            min-width: 400px;
-            margin-top: 50px;
-        }
+        body { font-family: 'Segoe UI', Arial, sans-serif; text-align: center; background-color: #f4f4f9; padding: 50px; margin: 0; }
+        .antrean-card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); display: inline-block; min-width: 400px; margin-top: 50px; }
         h1 { color: #34495e; font-size: 26px; margin: 0 0 20px 0; }
-        #nomor-layar {
-            font-size: 130px;
-            font-weight: bold;
-            color: #007bff;
-            margin: 20px 0;
-            line-height: 1;
-        }
-        .info {
-            font-size: 15px;
-            color: #7f8c8d;
-            background: #fdfefe;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px dashed #bdc3c7;
-        }
+        #nomor-layar { font-size: 130px; font-weight: bold; color: #007bff; margin: 20px 0; line-height: 1; }
+        .info { font-size: 15px; color: #7f8c8d; background: #fdfefe; padding: 12px; border-radius: 8px; border: 1px dashed #bdc3c7; }
     </style>
 </head>
 <body>
 
     <div class="antrean-card">
         <h1>NOMOR ANTREAN SEKARANG</h1>
-        <!-- Tempat angka termuat otomatis dari Cloud Google -->
-        <div id="nomor-layar">Memuat...</div>
+        <div id="nomor-layar">Menghubungkan...</div>
         <div class="info">📢 <strong>PENTING:</strong> Klik layar ini sekali dulu agar suara panggilannya aktif!</div>
     </div>
 
-    <!-- Memanggil file jembatan lokal yang aman -->
-    <script src="firebase-app-compat.js"></script>
+    <!-- Memanggil SDK Resmi Google dari server CDN alternatif yang bebas blokir -->
+    <script src="https://gstatic.com"></script>
+    <script src="https://gstatic.com"></script>
 
     <script>
-        // PENTING: Wajib 100% sama dengan config di admin.html
+        // PENTING: Wajib sama dengan config di admin.html
         const firebaseConfig = {
-            apiKey: "AIzaSyBXh2IAUXicqWAUK9VJqEEH1vR6AE5wqLQ",
+            apiKey: "AIzaSyBXh2IAUXicqWAUK9VJqEEH1vR6AE5wqLQ", 
             authDomain: "antrean-klinik-e890d.firebaseapp.com",
             projectId: "antrean-klinik-e890d",
             storageBucket: "antrean-klinik-e890d.firebasestorage.app",
@@ -68,33 +41,34 @@
 
         let halamanBaruDiakses = true;
 
-        // Fitur Pemanggil Suara Otomatis Bahasa Indonesia via Browser
         function panggilSuara(nomor) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 const kalimat = `Nomor antrean. ${nomor}. Silahkan menuju loket.`;
                 const ucapan = new SpeechSynthesisUtterance(kalimat);
                 ucapan.lang = 'id-ID';
-                ucapan.rate = 0.85; 
+                ucapan.rate = 0.85;
                 window.speechSynthesis.speak(ucapan);
             }
         }
 
-        // Menangkap data terbaru dari satelit server cloud Google asli lintas benua
+        // Listener Real-time bawaan SDK Google yang asli dan anti macet
         docRef.onSnapshot((snapshot) => {
             if (snapshot.exists) {
-                const nomorBaru = snapshot.data().nilai;
+                const nomorBaru = snapshot.data().nilai || 0;
                 document.getElementById("nomor-layar").innerText = nomorBaru;
 
-                // Suara hanya berbunyi jika angka berubah naik (bukan saat baru buka halaman)
                 if (!halamanBaruDiakses) {
                     panggilSuara(nomorBaru);
                 }
                 halamanBaruDiakses = false;
             }
+        }, (error) => {
+            console.error("Gagal terhubung:", error);
         });
     </script>
 </body>
 </html>
+
 
 
