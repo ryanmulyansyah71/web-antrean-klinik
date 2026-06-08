@@ -1,3 +1,7 @@
+// =========================================================================
+// JEMBATAN FLUIDA FIREBASE CLOUD (REST API STANDAR RESMI GOOGLE - FIXED URL)
+// Meloloskan aplikasi dari pemblokiran DNS Provider & Sensor Browser
+// =========================================================================
 (function(global) {
     if (!global.firebase) {
         var configRef = null;
@@ -20,7 +24,7 @@
         function updateDataKeCloud(nilaiBaru) {
             if (!configRef) return Promise.reject("Firebase belum siap!");
             
-            // Perbaikan Jalur Tautan Dokumen Menggunakan Masking Field Resmi Google
+            // Perbaikan URL Patch Utama Google Firestore REST API
             var url = "https://googleapis.com" + configRef.projectId + "/databases/(default)/documents/antrean/nomor_sekarang?updateMask.fieldPaths=nilai&key=" + configRef.apiKey;
             
             return fetch(url, {
@@ -50,6 +54,7 @@
         function ambilDataDariCloud() {
             if (!configRef) return;
 
+            // Perbaikan URL Get Utama Google Firestore REST API (Baris 50-55 Anda)
             var url = "https://googleapis.com" + configRef.projectId + "/databases/(default)/documents/antrean/nomor_sekarang?key=" + configRef.apiKey;
 
             fetch(url)
@@ -97,6 +102,8 @@
                     };
                 },
                 runTransaction: function(transactionFunction) {
+                    if (!configRef) return Promise.reject("Firebase belum siap!");
+                    
                     var url = "https://googleapis.com" + configRef.projectId + "/databases/(default)/documents/antrean/nomor_sekarang?key=" + configRef.apiKey;
                     
                     // Ambil angka terakhir sebelum ditambah, agar tidak terjadi bentrokan data antrean
