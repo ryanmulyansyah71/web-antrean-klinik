@@ -20,7 +20,8 @@
         function updateDataKeCloud(nilaiBaru) {
             if (!configRef) return Promise.reject("Firebase belum siap!");
             
-            var url = "https://googleapis.com" + configRef.projectId + "/databases/(default)/documents/antrean/nomor_sekarang?key=" + configRef.apiKey;
+            // Perbaikan Jalur Tautan Dokumen Menggunakan Masking Field Resmi Google
+            var url = "https://googleapis.com" + configRef.projectId + "/databases/(default)/documents/antrean/nomor_sekarang?updateMask.fieldPaths=nilai&key=" + configRef.apiKey;
             
             return fetch(url, {
                 method: "PATCH",
